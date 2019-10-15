@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import Section from '../components/Section';
 import { useSelector } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { fetchIssueList } from '../store/actions/fetchIssueList';
 
-import Layout from '../components/Layout';
-import Controls from '../components/Controls';
-import IssuesList from '../components/IssuesList';
-import Pagination from '../components/Pagination';
+import Layout from 'components/Layout';
+import Section from 'components/Section';
+import Controls from 'components/Controls';
+import IssuesList from 'components/IssuesList';
+import Pagination from 'components/Pagination';
 
 const NotFound = styled.p`
   margin: 20px 0;

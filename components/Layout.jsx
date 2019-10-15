@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import { ThemeProvider } from '@material-ui/styles';
 
-import theme from '../theme';
+import theme from '../config/theme';
 
 const Wrapper = styled.div`
   font-size: 14px;

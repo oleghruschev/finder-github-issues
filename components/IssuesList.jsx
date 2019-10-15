@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import theme from '../theme';
+import theme from '../config/theme';
 
 const Issues = styled.div``;
 

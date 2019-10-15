@@ -4,7 +4,7 @@ import Input from '@material-ui/core/Input';
 import React, { useState, useCallback } from 'react';
 import { FadeInDownBig } from 'animate-css-styled-components';
 
-import theme from '../theme';
+import theme from '../config/theme';
 import Section from './Section';
 
 const Wrapper = styled.div`

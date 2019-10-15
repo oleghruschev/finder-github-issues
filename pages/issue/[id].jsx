@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
+import React, { useEffect } from 'react';
 
-import Layout from '../../components/Layout';
+import Layout from 'components/Layout';
 
 const Issue = ({ data }) => {
   return (

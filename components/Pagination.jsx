@@ -1,4 +1,4 @@
-import theme from '../theme';
+import theme from '../config/theme';
 import { useDispatch } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import styled, { css } from 'styled-components';
