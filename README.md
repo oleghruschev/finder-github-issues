@@ -1,1 +1,1 @@
-# next-js-example
+# finder-github-issues
