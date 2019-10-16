@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
-import React, { useEffect } from 'react';
 
 import Layout from 'components/Layout';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';

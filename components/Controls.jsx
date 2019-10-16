@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import Input from '@material-ui/core/Input';
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { FadeInDownBig } from 'animate-css-styled-components';
 
 import theme from '../config/theme';
@@ -45,17 +45,23 @@ const Controls = ({ user, repository, fetchIssueList }) => {
   const [repositoryValue, setRepoValue] = useState(repository);
   const [repositoryIsError, setRepoError] = useState(false);
 
-  const handleUserValue = useCallback(e => {
-    if (userIsError) setUserError(false);
-    setUserValue(e.target.value);
-  });
+  const handleUserValue = useCallback(
+    e => {
+      if (userIsError) setUserError(false);
+      setUserValue(e.target.value);
+    },
+    [userIsError]
+  );
 
-  const handleRepoValue = useCallback(e => {
-    if (repositoryIsError) setRepoError(false);
-    setRepoValue(e.target.value);
-  });
+  const handleRepoValue = useCallback(
+    e => {
+      if (repositoryIsError) setRepoError(false);
+      setRepoValue(e.target.value);
+    },
+    [repositoryIsError]
+  );
 
-  const getIssues = useCallback(() => {
+  const getIssues = () => {
     if (!userValue) {
       setUserError(true);
     }
@@ -74,7 +80,7 @@ const Controls = ({ user, repository, fetchIssueList }) => {
         fetchIssueList({ user: userValue, repository: repositoryValue })
       );
     }
-  });
+  };
 
   return (
     <FadeInDownBig duration="0.8s" delay="0.2s">

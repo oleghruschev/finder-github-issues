@@ -2,7 +2,7 @@ import theme from '../config/theme';
 import { useDispatch } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import styled, { css } from 'styled-components';
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   ul {
@@ -74,9 +74,9 @@ const Pagination = ({ pageCount, fetchIssueList, isLoading }) => {
     }
   }, [width]);
 
-  const onPageChange = useCallback(({ selected }) => {
+  const onPageChange = ({ selected }) => {
     dispatch(fetchIssueList({ page: selected + 1 }));
-  });
+  };
 
   return (
     <Wrapper isLoading={isLoading}>
