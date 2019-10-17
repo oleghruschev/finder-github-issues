@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   font-weight: 600;
 `;
 
-const Header = styled.div`
+const Header = styled.header`
   position: relative;
   z-index: 10;
   display: flex;

@@ -4,36 +4,21 @@ import Input from '@material-ui/core/Input';
 import { useState, useCallback } from 'react';
 import { FadeInDownBig } from 'animate-css-styled-components';
 
-import theme from '../config/theme';
+import Button from './Button';
 import Section from './Section';
 
 const Wrapper = styled.div`
   z-index: -10;
   padding-bottom: 14px;
-  border: 2px solid black;
+  border: 1px solid black;
   border-top: none;
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;
   font-weight: 500;
+  box-shadow: 0px 1px 15px -5px;
 `;
 
-const Button = styled.button`
-  padding: 10px;
-  background: #fff;
-  border: 1px solid ${theme.palette.secondary.main};
-  font-weight: 600;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  outline: none;
-  user-select: none;
-
-  &:hover {
-    background: ${theme.palette.secondary.main};
-  }
-`;
-
-const InputWrap = styled.div`
+const InputStyled = styled.div`
   margin: 10px;
 `;
 
@@ -86,25 +71,25 @@ const Controls = ({ user, repository, fetchIssueList }) => {
     <FadeInDownBig duration="0.8s" delay="0.2s">
       <Wrapper>
         <Section>
-          <InputWrap>
+          <InputStyled>
             <Input
               value={userValue}
               placeholder="User"
               onChange={handleUserValue}
               error={userIsError}
             />
-          </InputWrap>
-          <InputWrap>
+          </InputStyled>
+          <InputStyled>
             <Input
               value={repositoryValue}
               placeholder="Repository"
               onChange={handleRepoValue}
               error={repositoryIsError}
             />
-          </InputWrap>
+          </InputStyled>
         </Section>
         <Section>
-          <Button onClick={getIssues}>get issues</Button>
+          <Button onClick={getIssues} value="get issues" />
         </Section>
       </Wrapper>
     </FadeInDownBig>
