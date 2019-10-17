@@ -28,10 +28,12 @@
     "styled-components": "^4.4.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.3",
     "babel-plugin-styled-components": "^1.10.6",
     "eslint": "^6.5.1",
     "eslint-loader": "^3.0.2",
     "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.1.2",
     "prettier": "^1.18.2",
     "redux-devtools-extension": "^2.13.8",
     "stylelint": "^11.0.0",
