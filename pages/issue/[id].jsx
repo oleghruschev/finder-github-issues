@@ -33,10 +33,17 @@ const State = styled.span`
   }}
 `;
 
-const Issue = ({ data, commentsData = [] }) => {
-  console.log(data);
+const Issue = ({ data, commentsData = [], hasError }) => {
+  if (hasError)
+    return (
+      <Layout>
+        <Section>An error occurred</Section>
+      </Layout>
+    );
+
   const { title, number, state, comments, body, user = {}, created_at } = data;
   const { login, avatar_url } = user;
+
   return (
     <Layout>
       <p>
@@ -73,16 +80,21 @@ Issue.getInitialProps = async ({ query: { id } }) => {
   const url = `https://api.github.com/repos/${user}/${repository}/issues/${number}`;
   const commentsUrl = `${url}/comments`;
 
-  const [res, commentsRes] = await Promise.all([
-    fetch(url),
-    fetch(commentsUrl),
-  ]);
-  const [data, commentsData] = await Promise.all([
-    res.json(),
-    commentsRes.json(),
-  ]);
+  try {
+    const [res, commentsRes] = await Promise.all([
+      fetch(url),
+      fetch(commentsUrl),
+    ]);
+    const [data, commentsData] = await Promise.all([
+      res.json(),
+      commentsRes.json(),
+    ]);
 
-  return { data, commentsData };
+    return { data, commentsData };
+  } catch (err) {
+    console.error(err);
+    return { hasError };
+  }
 };
 
 export default Issue;
