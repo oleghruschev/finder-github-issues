@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 
 const Wrapper = styled.div`
+  overflow: hidden;
   padding: 24px 0 12px;
 `;
 

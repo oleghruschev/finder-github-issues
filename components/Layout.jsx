@@ -1,9 +1,13 @@
-import Head from 'next/head';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import { ThemeProvider } from '@material-ui/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import theme from '../config/theme';
+
+import Section from 'components/Section';
+
+const headerHeight = '80px';
 
 const Wrapper = styled.div`
   font-size: 14px;
@@ -12,11 +16,13 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.header`
-  position: relative;
+  position: fixed;
+  top: 0;
   z-index: 10;
   display: flex;
   align-items: center;
-  height: 80px;
+  width: 100%;
+  height: ${headerHeight};
   background: ${theme.palette.primary.main};
   font-weight: 700;
 `;
@@ -27,22 +33,29 @@ const HeaderContent = styled.div`
   color: #fff;
 `;
 
-const Layout = ({ children }) => {
-  const title = 'Finder github issues';
+const Content = styled.main`
+  margin-top: ${headerHeight};
+`;
 
+const Layout = ({ children, isLoadingPage }) => {
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link rel="icon" type="image/x-icon" href="../static/favicon.ico" />
-      </Head>
       <ThemeProvider theme={theme}>
         <Wrapper>
           <Header>
-            <HeaderContent>{title}</HeaderContent>
+            <HeaderContent>Finder github issues</HeaderContent>
           </Header>
-          <Container maxWidth="sm">{children}</Container>
+          <Container maxWidth="sm">
+            <Content>
+              {isLoadingPage ? (
+                <Section>
+                  <CircularProgress />
+                </Section>
+              ) : (
+                children
+              )}
+            </Content>
+          </Container>
         </Wrapper>
       </ThemeProvider>
     </>

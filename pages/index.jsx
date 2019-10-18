@@ -16,13 +16,13 @@ const NotFound = styled.p`
   font-weight: 600;
 `;
 
-const Index = () => {
+const Index = ({ isLoadingPage }) => {
   const { user, repository, pageCount, isLoading, data } = useSelector(
     state => ({ ...state.issueList })
   );
 
   return (
-    <Layout>
+    <Layout isLoadingPage={isLoadingPage}>
       <Controls {...{ user, repository, fetchIssueList }} />
       {pageCount > 1 && (
         <Section>
