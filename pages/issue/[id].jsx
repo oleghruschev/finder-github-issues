@@ -3,6 +3,7 @@ import fetch from 'isomorphic-unfetch';
 import styled, { css } from 'styled-components';
 import { shape, arrayOf, string, number, bool } from 'prop-types';
 
+import theme from 'config/theme';
 import formateDate from 'helpers/formateDate';
 
 import Layout from 'components/Layout';
@@ -14,13 +15,22 @@ const states = {
   closed: '#b60205',
 };
 
+const CustomLink = styled.a`
+  line-height: 4;
+  cursor: pointer;
+
+  &:hover {
+    color: ${theme.palette.primary.main};
+  }
+`;
+
 const Number = styled.span`
   color: #9f9f9f;
 `;
 
 const Title = styled.h1`
   font-weight: 600;
-  margin-bottom: 4px;
+  margin: 0 0 4px;
 `;
 
 const SubTitle = styled.span`
@@ -48,14 +58,13 @@ const Issue = ({ data, commentsData = [], hasError }) => {
 
   const { title, number, state, comments, body, user = {}, created_at } = data;
   const { login, avatar_url } = user;
-
   const createdDate = formateDate(created_at);
 
   return (
     <Layout>
-      <p>
-        <Link href="/">Back</Link>
-      </p>
+      <Link href="/">
+        <CustomLink>{`<- Back`}</CustomLink>
+      </Link>
       <Title>
         {title} <Number>#{number}</Number>
       </Title>
@@ -68,15 +77,19 @@ const Issue = ({ data, commentsData = [], hasError }) => {
         {...{ body, login, avatarUrl: avatar_url, date: created_at }}
       />
       {Array.isArray(commentsData) &&
-        commentsData.map(({ body, user, created_at, id }) => (
-          <CommentBlock
-            key={id}
-            body={body}
-            login={user.login}
-            avatarUrl={user.avatar_url}
-            date={created_at}
-          />
-        ))}
+        commentsData.map(({ body, user, created_at, id }) => {
+          const { login, avatar_url } = user;
+
+          return (
+            <CommentBlock
+              key={id}
+              body={body}
+              login={login}
+              avatarUrl={avatar_url}
+              date={created_at}
+            />
+          );
+        })}
     </Layout>
   );
 };
@@ -113,12 +126,15 @@ Issue.propTypes = {
     created_at: string.isRequired,
     user: shape({
       login: string.isRequired,
-      avatarUrl: string.isRequired,
+      avatar_url: string.isRequired,
     }).isRequired,
   }).isRequired,
   commentsData: arrayOf(
     shape({
-      user: string.isRequired,
+      user: shape({
+        login: string.isRequired,
+        avatar_url: string.isRequired,
+      }).isRequired,
       body: string.isRequired,
       created_at: string.isRequired,
       id: number,

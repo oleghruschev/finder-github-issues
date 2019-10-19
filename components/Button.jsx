@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { func, string } from 'prop-types';
 
-import theme from '../config/theme';
+import theme from 'config/theme';
 
 const ButtonStyled = styled.button`
   padding: 10px;

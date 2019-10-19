@@ -2,7 +2,7 @@ import { string } from 'prop-types';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 
-import theme from '../config/theme';
+import theme from 'config/theme';
 
 import formateDate from 'helpers/formateDate';
 

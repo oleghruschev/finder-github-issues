@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { string, arrayOf, object } from 'prop-types';
 
-import theme from '../config/theme';
+import theme from 'config/theme';
 
 import commentIco from 'assets/img/comment.png';
 

@@ -2,6 +2,7 @@ import App from 'next/app';
 import Head from 'next/head';
 import Router from 'next/router';
 import { Provider } from 'react-redux';
+import { object, func } from 'prop-types';
 import { useEffect, useState } from 'react';
 import withReduxStore from '../lib/with-redux-store';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -28,11 +29,12 @@ const ComponentWrap = ({ pageProps, Component }) => {
     };
   }, []);
 
-  return (
-    <>
-      <Component {...pageProps} isLoadingPage={isLoadingPage} />
-    </>
-  );
+  return <Component {...pageProps} isLoadingPage={isLoadingPage} />;
+};
+
+ComponentWrap.propTypes = {
+  pageProps: object,
+  Component: func.isRequired,
 };
 
 class MyApp extends App {

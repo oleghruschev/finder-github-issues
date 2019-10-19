@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import { ThemeProvider } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import theme from '../config/theme';
+import theme from 'config/theme';
 
 import Section from 'components/Section';
 
