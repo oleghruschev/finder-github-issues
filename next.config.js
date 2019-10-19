@@ -1,9 +1,12 @@
 const path = require('path');
+const withImages = require('next-images');
 
-module.exports = {
+module.exports = withImages({
   webpack(config) {
+    config.resolve.alias['assets'] = path.join(__dirname, 'assets');
+    config.resolve.alias['helpers'] = path.join(__dirname, 'helpers');
     config.resolve.alias['components'] = path.join(__dirname, 'components');
 
     return config;
   },
-};
+});

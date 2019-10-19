@@ -3,6 +3,8 @@ import ReactMarkdown from 'react-markdown';
 
 import theme from '../config/theme';
 
+import formateDate from 'helpers/FormateDate';
+
 const Wrapper = styled.div`
   margin-top: 40px;
   box-shadow: 0px 1px 15px -5px;
@@ -40,12 +42,13 @@ const Footer = styled.div`
   text-align: right;
 `;
 
-const CommentBlock = ({ login, data, body, avatarUrl }) => {
+const CommentBlock = ({ login, date, body, avatarUrl }) => {
+  const createdDate = formateDate(date);
   return (
     <Wrapper>
       <Title>
         <Avatar src={avatarUrl}></Avatar>
-        {login} comennted on {data}
+        {login} comennted on {createdDate}
       </Title>
       <Body>
         <ReactMarkdown source={body} />

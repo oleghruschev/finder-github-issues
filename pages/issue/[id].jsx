@@ -2,8 +2,15 @@ import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 import styled, { css } from 'styled-components';
 
+import formateDate from 'helpers/formateDate';
+
 import Layout from 'components/Layout';
 import CommentBlock from 'components/CommentBlock';
+
+const states = {
+  open: '#2cbe4e',
+  closed: '#b60205',
+};
 
 const Number = styled.span`
   color: #9f9f9f;
@@ -19,16 +26,12 @@ const SubTitle = styled.span`
   font-weight: 500;
 `;
 
-const states = {
-  open: '#2cbe4e',
-};
-
 const State = styled.span`
   padding: 4px 8px;
   color: #fff;
   ${({ state }) => {
     return css`
-      background: ${states[state] || 'red'};
+      background: ${states[state] || '#9f9f9f'};
     `;
   }}
 `;
@@ -44,6 +47,8 @@ const Issue = ({ data, commentsData = [], hasError }) => {
   const { title, number, state, comments, body, user = {}, created_at } = data;
   const { login, avatar_url } = user;
 
+  const createdDate = formateDate(created_at);
+
   return (
     <Layout>
       <p>
@@ -55,10 +60,10 @@ const Issue = ({ data, commentsData = [], hasError }) => {
       <span></span>
       <State state={state}>{state}</State>
       <SubTitle>
-        {login} opened this issue on {created_at} - {comments} comments
+        {login} opened this issue on {createdDate} - {comments} comments
       </SubTitle>
       <CommentBlock
-        {...{ body, login, avatarUrl: avatar_url, data: created_at }}
+        {...{ body, login, avatarUrl: avatar_url, date: created_at }}
       />
       {Array.isArray(commentsData) &&
         commentsData.map(({ body, user, created_at, id }) => (
@@ -67,7 +72,7 @@ const Issue = ({ data, commentsData = [], hasError }) => {
             body={body}
             login={user.login}
             avatarUrl={user.avatar_url}
-            data={created_at}
+            date={created_at}
           />
         ))}
     </Layout>
