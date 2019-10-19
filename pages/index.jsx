@@ -1,3 +1,4 @@
+import { bool } from 'prop-types';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -46,6 +47,10 @@ const Index = ({ isLoadingPage }) => {
       </Section>
     </Layout>
   );
+};
+
+Index.propTypes = {
+  isLoadingPage: bool,
 };
 
 export default Index;

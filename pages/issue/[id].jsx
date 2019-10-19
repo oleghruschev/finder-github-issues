@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 import styled, { css } from 'styled-components';
+import { shape, arrayOf, string, number, bool } from 'prop-types';
 
 import formateDate from 'helpers/formateDate';
 
 import Layout from 'components/Layout';
+import Section from 'components/Section';
 import CommentBlock from 'components/CommentBlock';
 
 const states = {
@@ -95,11 +97,34 @@ Issue.getInitialProps = async ({ query: { id } }) => {
       commentsRes.json(),
     ]);
 
-    return { data, commentsData };
+    return { data, commentsData, hasError: false };
   } catch (err) {
-    console.error(err);
-    return { hasError };
+    // console.error(err);
+    return { hasError: true };
   }
+};
+
+Issue.propTypes = {
+  data: shape({
+    title: string.isRequired,
+    number: number.isRequired,
+    comments: number.isRequired,
+    body: string.isRequired,
+    created_at: string.isRequired,
+    user: shape({
+      login: string.isRequired,
+      avatarUrl: string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  commentsData: arrayOf(
+    shape({
+      user: string.isRequired,
+      body: string.isRequired,
+      created_at: string.isRequired,
+      id: number,
+    }).isRequired
+  ).isRequired,
+  hasError: bool.isRequired,
 };
 
 export default Issue;

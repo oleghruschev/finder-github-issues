@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { func, string } from 'prop-types';
 
 import theme from '../config/theme';
 
@@ -22,5 +23,10 @@ const ButtonStyled = styled.button`
 const Button = ({ onClick, value }) => (
   <ButtonStyled onClick={onClick}>{value}</ButtonStyled>
 );
+
+Button.propTypes = {
+  onClick: func.isRequired,
+  value: string.isRequired,
+};
 
 export default Button;

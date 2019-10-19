@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
+import { string, func } from 'prop-types';
 import Input from '@material-ui/core/Input';
 import { useState, useCallback } from 'react';
 import { FadeInDownBig } from 'animate-css-styled-components';
@@ -94,6 +95,12 @@ const Controls = ({ user, repository, fetchIssueList }) => {
       </Wrapper>
     </FadeInDownBig>
   );
+};
+
+Controls.propTypes = {
+  user: string,
+  repository: string,
+  fetchIssueList: func.isRequired,
 };
 
 export default Controls;

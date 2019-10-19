@@ -1,9 +1,10 @@
-import styled, { css } from 'styled-components';
+import { string } from 'prop-types';
+import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 
 import theme from '../config/theme';
 
-import formateDate from 'helpers/FormateDate';
+import formateDate from 'helpers/formateDate';
 
 const Wrapper = styled.div`
   margin-top: 40px;
@@ -56,6 +57,13 @@ const CommentBlock = ({ login, date, body, avatarUrl }) => {
       <Footer>like</Footer>
     </Wrapper>
   );
+};
+
+CommentBlock.propTypes = {
+  login: string.isRequired,
+  date: string.isRequired,
+  body: string.isRequired,
+  avatarUrl: string.isRequired,
 };
 
 export default CommentBlock;

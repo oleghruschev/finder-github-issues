@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { node, bool } from 'prop-types';
 import Container from '@material-ui/core/Container';
 import { ThemeProvider } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -60,6 +61,11 @@ const Layout = ({ children, isLoadingPage }) => {
       </ThemeProvider>
     </>
   );
+};
+
+Layout.propTypes = {
+  children: node.isRequired,
+  isLoadingPage: bool,
 };
 
 export default Layout;

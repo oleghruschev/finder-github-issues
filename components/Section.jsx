@@ -1,3 +1,4 @@
+import { node, string } from 'prop-types';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 
@@ -18,5 +19,12 @@ const Section = ({
     </Grid>
   </Wrapper>
 );
+
+Section.propTypes = {
+  children: node.isRequired,
+  direction: string,
+  justify: string,
+  alignItems: string,
+};
 
 export default Section;

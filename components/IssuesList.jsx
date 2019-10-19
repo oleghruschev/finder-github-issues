@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import styled from 'styled-components';
+import { string, arrayOf, object } from 'prop-types';
 
 import theme from '../config/theme';
 
 import commentIco from 'assets/img/comment.png';
-
-const Issues = styled.div``;
 
 const CustomLink = styled.a`
   display: flex;
@@ -46,10 +45,10 @@ const IssuesList = ({ data = [], user, repository }) => {
   if (!data.length) return null;
 
   return (
-    <Issues>
-      {data.map(({ title, number, comments }, index) => (
+    <div>
+      {data.map(({ title, number, comments, id }) => (
         <Link
-          key={index}
+          key={id}
           href="issue/[id]"
           as={`issue/${user}-${repository}-${number}`}
         >
@@ -67,8 +66,14 @@ const IssuesList = ({ data = [], user, repository }) => {
           </CustomLink>
         </Link>
       ))}
-    </Issues>
+    </div>
   );
+};
+
+IssuesList.propTypes = {
+  data: arrayOf(object),
+  user: string.isRequired,
+  repository: string.isRequired,
 };
 
 export default IssuesList;

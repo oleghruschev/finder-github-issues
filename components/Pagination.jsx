@@ -1,8 +1,9 @@
 import theme from '../config/theme';
 import { useDispatch } from 'react-redux';
 import ReactPaginate from 'react-paginate';
-import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
+import { number, bool, func } from 'prop-types';
 
 const Wrapper = styled.div`
   ul {
@@ -90,6 +91,12 @@ const Pagination = ({ pageCount, fetchIssueList, isLoading }) => {
       />
     </Wrapper>
   );
+};
+
+Pagination.propTypes = {
+  isLoading: bool.isRequired,
+  pageCount: number.isRequired,
+  fetchIssueList: func.isRequired,
 };
 
 export default Pagination;
