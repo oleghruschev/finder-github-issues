@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 import styled, { css } from 'styled-components';
-import { shape, arrayOf, string, number, bool } from 'prop-types';
+import { shape, arrayOf, string, number, bool, object } from 'prop-types';
 
 import theme from 'config/theme';
 import formateDate from 'helpers/formateDate';
 
 import Layout from 'components/Layout';
 import Section from 'components/Section';
+import Comments from 'components/Comments';
 import CommentBlock from 'components/CommentBlock';
 
 const states = {
@@ -48,7 +49,7 @@ const State = styled.span`
   }}
 `;
 
-const Issue = ({ data, commentsData = [], hasError }) => {
+const Issue = ({ data, commentsData, hasError }) => {
   if (hasError)
     return (
       <Layout>
@@ -68,7 +69,6 @@ const Issue = ({ data, commentsData = [], hasError }) => {
       <Title>
         {title} <Number>#{number}</Number>
       </Title>
-      <span></span>
       <State state={state}>{state}</State>
       <SubTitle>
         {login} opened this issue on {createdDate} - {comments} comments
@@ -76,20 +76,7 @@ const Issue = ({ data, commentsData = [], hasError }) => {
       <CommentBlock
         {...{ body, login, avatarUrl: avatar_url, date: created_at }}
       />
-      {Array.isArray(commentsData) &&
-        commentsData.map(({ body, user, created_at, id }) => {
-          const { login, avatar_url } = user;
-
-          return (
-            <CommentBlock
-              key={id}
-              body={body}
-              login={login}
-              avatarUrl={avatar_url}
-              date={created_at}
-            />
-          );
-        })}
+      <Comments data={commentsData} />
     </Layout>
   );
 };
@@ -112,7 +99,7 @@ Issue.getInitialProps = async ({ query: { id } }) => {
 
     return { data, commentsData, hasError: false };
   } catch (err) {
-    // console.error(err);
+    console.error(err);
     return { hasError: true };
   }
 };
@@ -129,17 +116,7 @@ Issue.propTypes = {
       avatar_url: string.isRequired,
     }).isRequired,
   }).isRequired,
-  commentsData: arrayOf(
-    shape({
-      user: shape({
-        login: string.isRequired,
-        avatar_url: string.isRequired,
-      }).isRequired,
-      body: string.isRequired,
-      created_at: string.isRequired,
-      id: number,
-    }).isRequired
-  ).isRequired,
+  commentsData: arrayOf(object).isRequired,
   hasError: bool.isRequired,
 };
 

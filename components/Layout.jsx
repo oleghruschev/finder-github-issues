@@ -35,7 +35,7 @@ const HeaderContent = styled.div`
 `;
 
 const Content = styled.main`
-  margin-top: ${headerHeight};
+  margin: ${headerHeight} 0;
 `;
 
 const Layout = ({ children, isLoadingPage }) => {

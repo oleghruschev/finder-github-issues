@@ -11,9 +11,13 @@ const CustomLink = styled.a`
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 20px;
+  padding: 4px 10px;
+  border: 1px solid;
+  border-radius: 8px;
   color: ${theme.palette.text.main};
   text-decoration: none;
   font-weight: 600;
+  box-shadow: 0px 1px 15px -5px;
 
   &:hover {
     cursor: pointer;

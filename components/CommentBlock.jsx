@@ -39,10 +39,6 @@ const Avatar = styled.img`
   width: 40px;
 `;
 
-const Footer = styled.div`
-  text-align: right;
-`;
-
 const CommentBlock = ({ login, date, body, avatarUrl }) => {
   const createdDate = formateDate(date);
   return (
@@ -54,7 +50,6 @@ const CommentBlock = ({ login, date, body, avatarUrl }) => {
       <Body>
         <ReactMarkdown source={body} />
       </Body>
-      <Footer>like</Footer>
     </Wrapper>
   );
 };
