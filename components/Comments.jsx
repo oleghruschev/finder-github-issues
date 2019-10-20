@@ -1,4 +1,4 @@
-import { shape, string, number } from 'prop-types';
+import { shape, arrayOf, string, number } from 'prop-types';
 
 import CommentBlock from 'components/CommentBlock';
 
@@ -19,15 +19,17 @@ const Comments = ({ data = [] }) => {
 };
 
 Comments.propTypes = {
-  data: shape({
-    user: shape({
-      login: string.isRequired,
-      avatar_url: string.isRequired,
-    }).isRequired,
-    body: string.isRequired,
-    created_at: string.isRequired,
-    id: number,
-  }).isRequired,
+  data: arrayOf(
+    shape({
+      user: shape({
+        login: string.isRequired,
+        avatar_url: string.isRequired,
+      }).isRequired,
+      body: string.isRequired,
+      created_at: string.isRequired,
+      id: number,
+    })
+  ).isRequired,
 };
 
 export default Comments;
