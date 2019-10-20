@@ -17,18 +17,15 @@ const Wrapper = styled.div`
 const Title = styled.div`
   display: flex;
   align-items: center;
-
   border-bottom: 1px solid;
   background: ${theme.palette.light.main};
 `;
 
 const Body = styled.div`
   font-weight: 500;
-
   img {
     width: 100%;
   }
-
   code {
     white-space: pre-wrap;
   }
