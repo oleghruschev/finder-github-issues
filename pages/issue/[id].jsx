@@ -19,7 +19,6 @@ const states = {
 const CustomLink = styled.a`
   line-height: 4;
   cursor: pointer;
-
   &:hover {
     color: ${theme.palette.primary.main};
   }

@@ -17,28 +17,23 @@ const Wrapper = styled.div`
     font-weight: 600;
     outline: none;
     user-select: none;
-
     ${({ isLoading }) =>
       isLoading &&
       css`
         pointer-events: none;
       `}
-
     li {
       margin-right: 10px;
       cursor: pointer;
-
       &:hover {
         color: ${theme.palette.secondary.main};
       }
-
       a {
         padding: 4px 8px;
         &:focus {
           outline: none;
         }
       }
-
       &.selected {
         border: 1px solid;
         outline: none;

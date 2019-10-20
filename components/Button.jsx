@@ -13,7 +13,6 @@ const ButtonStyled = styled.button`
   cursor: pointer;
   outline: none;
   user-select: none;
-
   &:hover {
     background: ${theme.palette.secondary.main};
     color: #fff;

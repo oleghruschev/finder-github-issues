@@ -18,7 +18,6 @@ const CustomLink = styled.a`
   text-decoration: none;
   font-weight: 600;
   box-shadow: 0px 1px 15px -5px;
-
   &:hover {
     cursor: pointer;
     color: ${theme.palette.primary.main};
@@ -37,7 +36,6 @@ const Comment = styled(Number)`
   justify-content: flex-end;
   align-items: center;
   text-align: right;
-
   img {
     margin-right: 8px;
     width: 16px;
