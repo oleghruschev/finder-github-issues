@@ -7,6 +7,7 @@ import theme from 'config/theme';
 import formateDate from 'helpers/formateDate';
 
 const Wrapper = styled.div`
+  overflow: hidden;
   margin-top: 40px;
   box-shadow: 0px 1px 15px -5px;
   & > div {
