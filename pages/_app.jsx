@@ -5,7 +5,10 @@ import { Provider } from 'react-redux';
 import { object, func } from 'prop-types';
 import { useEffect, useState } from 'react';
 import withReduxStore from '../lib/withReduxStore';
+import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
+import theme from 'config/theme';
 
 const ComponentWrap = ({ pageProps, Component }) => {
   const [isLoadingPage, setLoadingPage] = useState(false);
@@ -19,6 +22,12 @@ const ComponentWrap = ({ pageProps, Component }) => {
   };
 
   useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side');
+
+    if (jssStyles) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+
     Router.events.on('routeChangeStart', handleOnLoading);
     Router.events.on('routeChangeComplete', handleOffLoading);
     Router.events.on('routeChangeError', handleOffLoading);
@@ -45,14 +54,11 @@ class MyApp extends App {
       <Provider store={reduxStore}>
         <Head>
           <title>Finder github issues</title>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-          <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
         </Head>
-        <CssBaseline />
-        <ComponentWrap pageProps={pageProps} Component={Component} />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <ComponentWrap pageProps={pageProps} Component={Component} />
+        </ThemeProvider>
       </Provider>
     );
   }

@@ -1,24 +1,22 @@
-import Document, { Head, Main, NextScript } from 'next/document';
+import React from 'react';
 import { ServerStyleSheet } from 'styled-components';
+import { ServerStyleSheets } from '@material-ui/styles';
+import Document, { Head, Main, NextScript } from 'next/document';
 
-export default class MyDocument extends Document {
-  static getInitialProps({ renderPage }) {
-    const sheet = new ServerStyleSheet();
+import theme from 'config/theme';
 
-    const page = renderPage(App => props =>
-      sheet.collectStyles(<App {...props} />)
-    );
-
-    const styleTags = sheet.getStyleElement();
-
-    return { ...page, styleTags };
-  }
-
+class MyDocument extends Document {
   render() {
     return (
-      <html>
+      <html lang="en">
         <Head>
-          <title>My page</title>
+          <meta charSet="utf-8" />
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+          <meta name="theme-color" content={theme.palette.primary.main} />
+          <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
           {this.props.styleTags}
         </Head>
         <body>
@@ -29,3 +27,37 @@ export default class MyDocument extends Document {
     );
   }
 }
+
+MyDocument.getInitialProps = async ctx => {
+  const sheets = new ServerStyleSheets();
+  const originalRenderPage = ctx.renderPage;
+
+  ctx.renderPage = () =>
+    originalRenderPage({
+      enhanceApp: App => props => sheets.collect(<App {...props} />),
+    });
+
+  const sheet = new ServerStyleSheet();
+
+  const page = ctx.renderPage(App => props =>
+    sheet.collectStyles(<App {...props} />)
+  );
+
+  const styleTags = sheet.getStyleElement();
+
+  const initialProps = await Document.getInitialProps(ctx);
+
+  return {
+    ...initialProps,
+    styleTags,
+    page,
+    styles: [
+      <React.Fragment key="styles">
+        {initialProps.styles}
+        {sheets.getStyleElement()}
+      </React.Fragment>,
+    ],
+  };
+};
+
+export default MyDocument;
