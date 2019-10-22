@@ -4,7 +4,7 @@ import { string, arrayOf, object } from 'prop-types';
 
 import theme from 'config/theme';
 
-import commentIco from 'assets/img/comment.png';
+import commentIco from 'static/img/comment.png';
 
 const CustomLink = styled.a`
   display: flex;

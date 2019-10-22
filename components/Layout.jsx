@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { node, bool } from 'prop-types';
 import Container from '@material-ui/core/Container';
-import { ThemeProvider } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import theme from 'config/theme';
@@ -40,26 +39,22 @@ const Content = styled.main`
 
 const Layout = ({ children, isLoadingPage }) => {
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <Wrapper>
-          <Header>
-            <HeaderContent>Finder github issues</HeaderContent>
-          </Header>
-          <Container maxWidth="sm">
-            <Content>
-              {isLoadingPage ? (
-                <Section>
-                  <CircularProgress />
-                </Section>
-              ) : (
-                children
-              )}
-            </Content>
-          </Container>
-        </Wrapper>
-      </ThemeProvider>
-    </>
+    <Wrapper>
+      <Header>
+        <HeaderContent>Finder github issues</HeaderContent>
+      </Header>
+      <Container maxWidth="sm">
+        <Content>
+          {isLoadingPage ? (
+            <Section>
+              <CircularProgress />
+            </Section>
+          ) : (
+            children
+          )}
+        </Content>
+      </Container>
+    </Wrapper>
   );
 };
 
