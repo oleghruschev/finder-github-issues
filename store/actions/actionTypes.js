@@ -1,4 +1,0 @@
-export const SET_USER = 'SET_USER';
-export const SET_PAGE_COUNT = 'SET_PAGE_COUNT';
-export const SET_ISSUES_RESULT = 'SET_ISSUES_RESULT';
-export const SET_ISSUES_LOADING = 'SET_ISSUES_LOADING';
