@@ -1,6 +1,8 @@
 import Link from 'next/link';
-import fetch from 'isomorphic-unfetch';
+import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useLazyQuery  } from '@apollo/react-hooks';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { shape, arrayOf, string, number, bool, object } from 'prop-types';
 
 import theme from 'config/theme';
@@ -10,6 +12,7 @@ import Layout from 'components/Layout';
 import Section from 'components/Section';
 import Comments from 'components/Comments';
 import CommentBlock from 'components/CommentBlock';
+import { GET_ISSUE_DETAIL, GET_COMMENTS } from '../../lib/queries';
 
 const states = {
   open: '#2cbe4e',
@@ -48,7 +51,7 @@ const State = styled.span`
   }}
 `;
 
-const Issue = ({ data, commentsData, hasError }) => {
+const Issue = ({ data, hasError, user, repository, issueNumber }) => {
   if (hasError)
     return (
       <Layout>
@@ -56,9 +59,39 @@ const Issue = ({ data, commentsData, hasError }) => {
       </Layout>
     );
 
-  const { title, number, state, comments, body, user = {}, created_at } = data;
-  const { login, avatar_url } = user;
-  const createdDate = formateDate(created_at);
+  const [hasMore, setHasMore] = useState(false)  
+  const [commentsData, setCommentsData] = useState([])
+
+  useEffect(() => {
+    const comments = data.comments.edges.map(comment => ({
+      cursor: comment.cursor,
+      ...comment.node
+    }));
+  
+    setHasMore(data.comments.pageInfo.hasNextPage)
+    setCommentsData(comments)
+  }, [])
+
+  const [getMoreComments, { loading, data: newData }] = useLazyQuery(GET_COMMENTS);
+
+  if (newData) {
+    const moreComments = newData.repository.issue.comments.edges.map(comment => ({
+      cursor: comment.cursor,
+      ...comment.node
+    }));
+
+    if (
+      commentsData[commentsData.length - 1].cursor !==
+      moreComments[moreComments.length - 1].cursor
+    ) {
+      setHasMore(newData.repository.issue.comments.pageInfo.hasNextPage)
+      setCommentsData([ ...commentsData, ...moreComments ])
+    }
+  }
+
+  const { title, number, state, body, author = {}, createdAt } = data;
+  const { login, avatarUrl } = author;
+  const createdDate = formateDate(createdAt);
 
   return (
     <Layout>
@@ -70,35 +103,56 @@ const Issue = ({ data, commentsData, hasError }) => {
       </Title>
       <State state={state}>{state}</State>
       <SubTitle>
-        {login} opened this issue on {createdDate} - {comments} comments
+        {login} opened this issue on {createdDate} - {commentsData.length} comments
       </SubTitle>
       <CommentBlock
-        {...{ body, login, avatarUrl: avatar_url, date: created_at }}
+        {...{ body, login, avatarUrl: avatarUrl, date: createdAt }}
       />
       <Comments data={commentsData} />
+      {hasMore && (
+        <Section>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <button onClick={() => {
+              getMoreComments({
+                variables: {
+                  owner: user,
+                  name: repository,
+                  number: issueNumber,
+                  countComments: 20,
+                  after: commentsData[commentsData.length - 1].cursor,
+                }
+              })
+            }}>
+              Load More
+            </button>
+          )}
+        </Section>
+      )}
     </Layout>
   );
 };
 
-Issue.getInitialProps = async ({ query: { id } }) => {
-  const [user, repository, number] = id.split('-');
-
-  const url = `https://api.github.com/repos/${user}/${repository}/issues/${number}`;
-  const commentsUrl = `${url}/comments`;
-
+Issue.getInitialProps = async ({ query: { id }, apolloClient }) => {
   try {
-    const [res, commentsRes] = await Promise.all([
-      fetch(url),
-      fetch(commentsUrl),
-    ]);
-    const [data, commentsData] = await Promise.all([
-      res.json(),
-      commentsRes.json(),
-    ]);
+    const [user, repository, number] = id.split('-');
+    const { data } = await apolloClient
+      .query({ query: GET_ISSUE_DETAIL, variables: {
+        owner: user,
+        name: repository,
+        number: + number,
+        countComments: 20
+      }})
 
-    return { data, commentsData, hasError: false };
+    return {
+      data: data.repository.issue,
+      hasError: false,
+      user,
+      repository,
+      issueNumber: + number,
+    }
   } catch (err) {
-    console.error(err);
     return { hasError: true };
   }
 };
@@ -107,15 +161,27 @@ Issue.propTypes = {
   data: shape({
     title: string.isRequired,
     number: number.isRequired,
-    comments: number.isRequired,
+    comments: shape({
+      pageInfo: shape({
+        hasNextPage: bool.isRequired
+      }).isRequired,
+      edges: arrayOf(
+        shape({
+          cursor: string.isRequired,
+          node: object.isRequired
+        }).isRequired,
+      ).isRequired,
+    }),
     body: string.isRequired,
-    created_at: string.isRequired,
-    user: shape({
+    createdAt: string.isRequired,
+    author: shape({
       login: string.isRequired,
-      avatar_url: string.isRequired,
+      avatarUrl: string.isRequired,
     }).isRequired,
   }).isRequired,
-  commentsData: arrayOf(object).isRequired,
+  user: string.isRequired,
+  repository: string.isRequired,
+  issueNumber: number.isRequired,
   hasError: bool.isRequired,
 };
 

@@ -100,7 +100,6 @@ const Controls = () => {
 Controls.propTypes = {
   user: string,
   repository: string,
-  fetchIssueList: func.isRequired,
 };
 
 export default Controls;

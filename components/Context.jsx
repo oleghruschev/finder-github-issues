@@ -2,12 +2,10 @@ import React, { createContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const IssuesDataContext = createContext({
-  pageCount: 0,
-  currentPage: 1,
   user: '',
   repository: '',
   dataIssues: null,
-  first: 100,
+  first: 10,
   setDataIssues: () => {},
 });
 
@@ -15,8 +13,8 @@ export default IssuesDataContext;
 
 export const AppProvider = ({ children }) => {
   const [dataIssues, setDataIssues] = useState([]);
-  const [user, setUser] = useState('facebook')
-  const [repository, setRepository] = useState('react')
+  const [user, setUser] = useState('')
+  const [repository, setRepository] = useState('')
   const [after, setAfter] = useState(null)
 
   return (
@@ -25,7 +23,7 @@ export const AppProvider = ({ children }) => {
         user,
         repository,
         dataIssues,
-        first: 100,
+        first: 10,
         after,
         setUser: value => {
           setUser(value)

@@ -1,13 +1,13 @@
 import { useContext } from 'react'
 import { bool } from 'prop-types';
 import styled from 'styled-components';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { Query } from 'react-apollo';
-import { GET_ISSUES } from '../lib/queries';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Layout from 'components/Layout';
 import Section from 'components/Section';
 import Controls from 'components/Controls';
+import { GET_ISSUES } from '../lib/queries';
 import IssuesList from 'components/IssuesList';
 import IssuesDataContext from 'components/Context'
 
@@ -34,12 +34,18 @@ const Index = (props) => {
             after,
           }}
         >
-          {({ loading, data }) => {
+          {({ loading, errors, data }) => {
+            if (errors) return <NotFound>Has erros</NotFound>
+            
             if (loading && !dataIssues.length) return (
               <Section>
                 <CircularProgress />
               </Section>
             )
+
+            if (!data || !data.repository) {
+              return <NotFound>Nothing found on your request</NotFound>
+            }
 
             const { edges, pageInfo: { hasNextPage } } = data.repository.issues;
 
@@ -50,37 +56,31 @@ const Index = (props) => {
               setDataIssues([...dataIssues, ...edges])
             }
 
-            if (Array.isArray(dataIssues)) {
-              return (
-                <>
-                  <Section>
-                    <IssuesList
-                      {...{
-                        data: dataIssues,
-                        user,
-                        repository,
-                      }} />
-                      {hasNextPage && (
-                        loading ? (
-                          <Section>
-                            <CircularProgress />
-                          </Section>
-                        ) : (
-                          <button onClick={() => {
-                            setAfter(dataIssues[dataIssues.length - 1].cursor)
-                          }}>
-                            Show more
-                          </button>
-                        )
-                      )}
-                  </Section>
-                </>
-              )
-            } else {
-              return (
-                <NotFound>Nothing found on your request</NotFound>
-              )
-            }
+            return (
+              <>
+                <Section>
+                  <IssuesList
+                    {...{
+                      data: dataIssues,
+                      user,
+                      repository,
+                    }} />
+                    {hasNextPage && (
+                      loading ? (
+                        <Section>
+                          <CircularProgress />
+                        </Section>
+                      ) : (
+                        <button onClick={() => {
+                          setAfter(dataIssues[dataIssues.length - 1].cursor)
+                        }}>
+                          Load More
+                        </button>
+                      )
+                    )}
+                </Section>
+              </>
+            )
           }}
         </Query>
       )}
