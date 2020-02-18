@@ -1,15 +1,15 @@
+import { useContext } from 'react'
 import { bool } from 'prop-types';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { Query } from 'react-apollo';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-import { fetchIssueList } from '../store/actions/fetchIssueList';
 
 import Layout from 'components/Layout';
 import Section from 'components/Section';
 import Controls from 'components/Controls';
+import { GET_ISSUES } from '../lib/queries';
 import IssuesList from 'components/IssuesList';
-import Pagination from 'components/Pagination';
+import IssuesDataContext from 'components/Context'
 
 const NotFound = styled.p`
   margin: 20px 0;
@@ -17,34 +17,73 @@ const NotFound = styled.p`
   font-weight: 600;
 `;
 
-const Index = ({ isLoadingPage }) => {
-  const { user, repository, pageCount, isLoading, data } = useSelector(
-    state => ({ ...state.issueList })
-  );
+const Index = (props) => {
+  const { isLoadingPage } = props
+  const { user, repository, first, after, setAfter, dataIssues, setDataIssues } = useContext(IssuesDataContext);
 
   return (
     <Layout isLoadingPage={isLoadingPage}>
-      <Controls {...{ user, repository, fetchIssueList }} />
-      {pageCount > 1 && (
-        <Section>
-          <Pagination {...{ pageCount, fetchIssueList, isLoading }} />
-        </Section>
+      <Controls />
+      {user && repository && (
+        <Query
+          query={GET_ISSUES}
+          variables={{
+            owner: user,
+            name: repository,
+            first,
+            after,
+          }}
+        >
+          {({ loading, errors, data }) => {
+            if (errors) return <NotFound>Has erros</NotFound>
+            
+            if (loading && !dataIssues.length) return (
+              <Section>
+                <CircularProgress />
+              </Section>
+            )
+
+            if (!data || !data.repository) {
+              return <NotFound>Nothing found on your request</NotFound>
+            }
+
+            const { edges, pageInfo: { hasNextPage } } = data.repository.issues;
+
+            if (
+              !dataIssues.length ||
+              dataIssues[dataIssues.length - 1].cursor !== edges[edges.length - 1].cursor
+            ) {
+              setDataIssues([...dataIssues, ...edges])
+            }
+
+            return (
+              <>
+                <Section>
+                  <IssuesList
+                    {...{
+                      data: dataIssues,
+                      user,
+                      repository,
+                    }} />
+                    {hasNextPage && (
+                      loading ? (
+                        <Section>
+                          <CircularProgress />
+                        </Section>
+                      ) : (
+                        <button onClick={() => {
+                          setAfter(dataIssues[dataIssues.length - 1].cursor)
+                        }}>
+                          Load More
+                        </button>
+                      )
+                    )}
+                </Section>
+              </>
+            )
+          }}
+        </Query>
       )}
-      <Section>
-        {isLoading ? (
-          <CircularProgress />
-        ) : Array.isArray(data) ? (
-          <IssuesList
-            {...{
-              data,
-              user,
-              repository,
-            }}
-          />
-        ) : (
-          <NotFound>Nothing found on your request</NotFound>
-        )}
-      </Section>
     </Layout>
   );
 };

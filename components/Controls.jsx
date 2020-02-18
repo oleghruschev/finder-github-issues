@@ -1,10 +1,11 @@
+import { useContext } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
 import { string, func } from 'prop-types';
 import Input from '@material-ui/core/Input';
 import { useState, useCallback } from 'react';
 import { FadeInDownBig } from 'animate-css-styled-components';
 
+import IssuesDataContext from 'components/Context'
 import Button from './Button';
 import Section from './Section';
 
@@ -23,9 +24,8 @@ const InputStyled = styled.div`
   margin: 10px;
 `;
 
-const Controls = ({ user, repository, fetchIssueList }) => {
-  const dispatch = useDispatch();
-
+const Controls = () => {
+  const { user, repository, setUser, setRepository, setDataIssues } = useContext(IssuesDataContext);
   const [userValue, setUserValue] = useState(user);
   const [userIsError, setUserError] = useState(false);
   const [repositoryValue, setRepoValue] = useState(repository);
@@ -62,9 +62,9 @@ const Controls = ({ user, repository, fetchIssueList }) => {
       valuesAreNotEmpty &&
       (userValue !== user || repositoryValue !== repository)
     ) {
-      dispatch(
-        fetchIssueList({ user: userValue, repository: repositoryValue })
-      );
+      setDataIssues([])
+      setUser(userValue)
+      setRepository(repositoryValue)
     }
   };
 
@@ -100,7 +100,6 @@ const Controls = ({ user, repository, fetchIssueList }) => {
 Controls.propTypes = {
   user: string,
   repository: string,
-  fetchIssueList: func.isRequired,
 };
 
 export default Controls;

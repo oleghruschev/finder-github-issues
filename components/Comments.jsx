@@ -3,16 +3,16 @@ import { shape, arrayOf, string, number } from 'prop-types';
 import CommentBlock from 'components/CommentBlock';
 
 const Comments = ({ data = [] }) => {
-  return data.map(({ body, user, created_at, id }) => {
-    const { login, avatar_url } = user;
+  return data.map(({ body, author, createdAt, id }) => {
+    const { login, avatarUrl } = author;
 
     return (
       <CommentBlock
         key={id}
         body={body}
         login={login}
-        avatarUrl={avatar_url}
-        date={created_at}
+        avatarUrl={avatarUrl}
+        date={createdAt}
       />
     );
   });
@@ -21,13 +21,13 @@ const Comments = ({ data = [] }) => {
 Comments.propTypes = {
   data: arrayOf(
     shape({
-      user: shape({
+      author: shape({
         login: string.isRequired,
-        avatar_url: string.isRequired,
+        avatarUrl: string.isRequired,
       }).isRequired,
       body: string.isRequired,
-      created_at: string.isRequired,
-      id: number,
+      createdAt: string.isRequired,
+      id: string,
     })
   ).isRequired,
 };

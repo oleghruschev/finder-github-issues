@@ -48,8 +48,12 @@ const IssuesList = ({ data = [], user, repository }) => {
 
   return (
     <div>
-      {data.map(({ title, number, comments, id }) => (
-        <Link
+      {data.map(({ node: { title, number, comments, id } }) => {
+        let comentsLength = comments.edges.length;
+        
+        if (comentsLength === 100) comentsLength = '99+'
+
+        return <Link
           key={id}
           href="issue/[id]"
           as={`issue/${user}-${repository}-${number}`}
@@ -59,15 +63,15 @@ const IssuesList = ({ data = [], user, repository }) => {
               <Number>{`#${number}`}</Number>
               {title}
             </div>
-            {comments > 0 && (
+            {comentsLength !== 0 && (
               <Comment>
                 <img src={commentIco} alt="" />
-                {comments}
+                {comentsLength}
               </Comment>
             )}
           </CustomLink>
         </Link>
-      ))}
+      })}
     </div>
   );
 };

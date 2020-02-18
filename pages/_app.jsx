@@ -1,14 +1,15 @@
 import App from 'next/app';
 import Head from 'next/head';
 import Router from 'next/router';
-import { Provider } from 'react-redux';
+import withApollo from '../lib/withApollo';
 import { object, func } from 'prop-types';
 import { useEffect, useState } from 'react';
-import withReduxStore from '../lib/withReduxStore';
 import { ThemeProvider } from '@material-ui/styles';
+import { ApolloProvider } from '@apollo/react-hooks';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import theme from 'config/theme';
+import { AppProvider } from 'components/Context'
 
 const ComponentWrap = ({ pageProps, Component }) => {
   const [isLoadingPage, setLoadingPage] = useState(false);
@@ -48,20 +49,22 @@ ComponentWrap.propTypes = {
 
 class MyApp extends App {
   render() {
-    const { Component, pageProps, reduxStore } = this.props;
+    const { Component, pageProps, apollo } = this.props;
 
     return (
-      <Provider store={reduxStore}>
-        <Head>
-          <title>Finder github issues</title>
-        </Head>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <ComponentWrap pageProps={pageProps} Component={Component} />
-        </ThemeProvider>
-      </Provider>
+      <ApolloProvider client={apollo}>
+        <AppProvider>
+          <Head>
+            <title>Finder github issues</title>
+          </Head>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <ComponentWrap pageProps={pageProps} Component={Component} />
+          </ThemeProvider>
+        </AppProvider>
+      </ApolloProvider>
     );
   }
 }
 
-export default withReduxStore(MyApp);
+export default withApollo(MyApp);
