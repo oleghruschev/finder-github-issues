@@ -1,8 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { string, func } from 'prop-types';
 import Input from '@material-ui/core/Input';
-import { useState, useCallback } from 'react';
 import { FadeInDownBig } from 'animate-css-styled-components';
 
 import IssuesDataContext from 'components/Context'
