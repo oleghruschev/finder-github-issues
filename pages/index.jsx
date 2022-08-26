@@ -3,6 +3,7 @@ import { bool } from 'prop-types';
 import styled from 'styled-components';
 import { Query } from 'react-apollo';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Container from '@material-ui/core/Container';
 
 import Layout from 'components/Layout';
 import Section from 'components/Section';
@@ -23,67 +24,69 @@ const Index = (props) => {
 
   return (
     <Layout isLoadingPage={isLoadingPage}>
-      <Controls />
-      {user && repository && (
-        <Query
-          query={GET_ISSUES}
-          variables={{
-            owner: user,
-            name: repository,
-            first,
-            after,
-          }}
-        >
-          {({ loading, errors, data }) => {
-            if (errors) return <NotFound>Has erros</NotFound>
-            
-            if (loading && !dataIssues.length) return (
-              <Section>
-                <CircularProgress />
-              </Section>
-            )
-
-            if (!data || !data.repository) {
-              return <NotFound>Nothing found on your request</NotFound>
-            }
-
-            const { edges, pageInfo: { hasNextPage } } = data.repository.issues;
-
-            if (
-              !dataIssues.length ||
-              dataIssues[dataIssues.length - 1].cursor !== edges[edges.length - 1].cursor
-            ) {
-              setDataIssues([...dataIssues, ...edges])
-            }
-
-            return (
-              <>
+      <Container maxWidth="sm">
+        <Controls />
+        {user && repository && (
+          <Query
+            query={GET_ISSUES}
+            variables={{
+              owner: user,
+              name: repository,
+              first,
+              after,
+            }}
+          >
+            {({ loading, errors, data }) => {
+              if (errors) return <NotFound>Has erros</NotFound>
+              
+              if (loading && !dataIssues.length) return (
                 <Section>
-                  <IssuesList
-                    {...{
-                      data: dataIssues,
-                      user,
-                      repository,
-                    }} />
-                    {hasNextPage && (
-                      loading ? (
-                        <Section>
-                          <CircularProgress />
-                        </Section>
-                      ) : (
-                        <button onClick={() => {
-                          setAfter(dataIssues[dataIssues.length - 1].cursor)
-                        }}>
-                          Load More
-                        </button>
-                      )
-                    )}
+                  <CircularProgress />
                 </Section>
-              </>
-            )
-          }}
-        </Query>
-      )}
+              )
+
+              if (!data || !data.repository) {
+                return <NotFound>Nothing found on your request</NotFound>
+              }
+
+              const { edges, pageInfo: { hasNextPage } } = data.repository.issues;
+
+              if (
+                !dataIssues.length ||
+                dataIssues[dataIssues.length - 1].cursor !== edges[edges.length - 1].cursor
+              ) {
+                setDataIssues([...dataIssues, ...edges])
+              }
+
+              return (
+                <>
+                  <Section>
+                    <IssuesList
+                      {...{
+                        data: dataIssues,
+                        user,
+                        repository,
+                      }} />
+                      {hasNextPage && (
+                        loading ? (
+                          <Section>
+                            <CircularProgress />
+                          </Section>
+                        ) : (
+                          <button onClick={() => {
+                            setAfter(dataIssues[dataIssues.length - 1].cursor)
+                          }}>
+                            Load More
+                          </button>
+                        )
+                      )}
+                  </Section>
+                </>
+              )
+            }}
+          </Query>
+        )}
+      </Container>
     </Layout>
   );
 };

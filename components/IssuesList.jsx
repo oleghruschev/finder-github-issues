@@ -11,7 +11,7 @@ const CustomLink = styled.a`
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 20px;
-  padding: 4px 10px;
+  padding: 12px;
   border: 1px solid;
   border-radius: 8px;
   color: ${theme.palette.text.main};

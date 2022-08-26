@@ -43,7 +43,7 @@ const Layout = ({ children, isLoadingPage }) => {
       <Header>
         <HeaderContent>Finder github issues</HeaderContent>
       </Header>
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Content>
           {isLoadingPage ? (
             <Section>
